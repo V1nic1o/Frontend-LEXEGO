@@ -1,6 +1,6 @@
 // src/api/api.js
 
-// 1. Leemos la URL de la API desde la variable de entorno.
+// Leemos la URL de nuestra API desde el archivo .env
 const API_URL = process.env.REACT_APP_API_URL;
 
 /**
@@ -15,12 +15,11 @@ export const analizarCodigo = async (codigoFuente) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      // 2. AJUSTE CRÍTICO: El backend en Go espera un JSON con la clave "codigo".
-      //    Cambiamos { codigoFuente } por { codigo: codigoFuente }.
-      body: JSON.stringify({ codigo: codigoFuente }),
+      body: JSON.stringify({ codigoFuente }), // Enviamos el código en el formato que espera el backend
     });
 
     if (!respuesta.ok) {
+      // Si el servidor responde con un error (ej. 400, 500), lanzamos una excepción.
       throw new Error(`Error del servidor: ${respuesta.status}`);
     }
 
@@ -28,7 +27,9 @@ export const analizarCodigo = async (codigoFuente) => {
     return tokens;
 
   } catch (error) {
+    // Si hay un error de red o de otro tipo, lo manejamos aquí.
     console.error("Error al conectar con la API:", error);
+    // Propagamos el error para que el componente de la UI pueda mostrar un mensaje.
     throw error;
   }
 };

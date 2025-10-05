@@ -4,7 +4,9 @@ import { analizarCodigo } from './api/api';
 import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 import CodeEditor from './components/CodeEditor/CodeEditor';
 import ResultsPanel from './components/ResultsPanel/ResultsPanel';
+// 1. IMPORTAMOS EL ICONO DEL HEADER Y EL ICONO DE LA ESCOBA
 import { BsShare } from 'react-icons/bs';
+import { VscClearAll } from 'react-icons/vsc';
 import Loader from './components/loader/Loader'; 
 
 function App() {
@@ -30,18 +32,22 @@ function App() {
     }
   };
 
+  // 2. FUNCIÓN PARA LIMPIAR LOS PANELES
+  const handleClear = () => {
+    setCodigo('');
+    setTokens([]);
+    setError('');
+  };
+
   return (
+    // Usando la paleta de colores 'gray' original
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen font-sans text-gray-800 dark:text-gray-200">
       
       {isLoading && <Loader />}
 
       <header className="container mx-auto sticky top-4 z-10 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg shadow-xl rounded-2xl">
         <div className="px-8 py-6 flex justify-between items-center">
-          
-          {/* --- SECCIÓN CON ANIMACIONES --- */}
-          <div className="flex items-center gap-5 group"> {/* Se añade 'group' para animaciones coordinadas si se quisiera */}
-            
-            {/* 1. Animación para el icono y el título */}
+          <div className="flex items-center gap-5 group">
             <div className="transition-transform duration-300 ease-in-out hover:scale-110">
               <div className="flex items-center gap-5">
                 <BsShare className="text-blue-500" size="2em" />
@@ -50,14 +56,10 @@ function App() {
                 </h1>
               </div>
             </div>
-
           </div>
-
-          {/* 2. Animación para el botón de tema */}
           <div className="transition-transform duration-300 ease-in-out hover:scale-110 hover:rotate-12">
             <ThemeToggle />
           </div>
-
         </div>
       </header>
 
@@ -72,6 +74,27 @@ function App() {
             <ResultsPanel tokens={tokens} error={error} />
           </div>
       </main>
+
+      {/* --- 3. BOTÓN DE LIMPIEZA CON EL ICONO DE ESCOBA --- */}
+      {codigo && (
+        <button
+          onClick={handleClear}
+          className="
+            fixed bottom-6 right-6 z-20
+            w-16 h-16 rounded-full 
+            bg-red-500 text-white 
+            flex items-center justify-center 
+            shadow-lg
+            transition-all duration-300 ease-in-out
+            transform hover:scale-110 hover:bg-red-600 
+            focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900
+          "
+          aria-label="Limpiar paneles"
+        >
+          <VscClearAll size="2em" />
+        </button>
+      )}
+
     </div>
   );
 }
